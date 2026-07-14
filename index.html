@@ -8,11 +8,13 @@
   <link rel="stylesheet" href="stylesheet.css">
 </head>
 <body>
+<a class="skip-link" href="#main-content">Skip to content</a>
 <div class="container">
 
   <!-- ===================== Header ===================== -->
   <header class="intro">
     <div class="intro-text">
+      <p class="eyebrow">AI · Language Models · Evaluation</p>
       <h1>Hyeonwoo Kim <span class="korean-name">(김현우)</span></h1>
       <p class="tagline">AI Research Engineer at <a href="https://www.navercorp.com/">Naver Corp</a></p>
       <p>
@@ -27,22 +29,35 @@
         <a href="https://www.kaggle.com/chocozzz">Kaggle Master</a> with a long record of
         machine learning competitions.
       </p>
-      <p class="links">
-        <a href="mailto:kimhyeonwoo2431@gmail.com">Email</a> /
-        <a href="https://github.com/choco9966">GitHub</a> /
-        <a href="https://www.linkedin.com/in/hyeonwookim2431/">LinkedIn</a> /
-        <a href="https://scholar.google.com/citations?user=fUikbhcAAAAJ">Google Scholar</a> /
-        <a href="https://www.kaggle.com/chocozzz">Kaggle</a> /
+      <nav class="profile-links" aria-label="Professional profiles">
+        <a href="mailto:kimhyeonwoo2431@gmail.com">Email</a>
+        <a href="https://github.com/choco9966">GitHub</a>
+        <a href="https://www.linkedin.com/in/hyeonwookim2431/">LinkedIn</a>
+        <a href="https://scholar.google.com/citations?user=fUikbhcAAAAJ">Google Scholar</a>
+        <a href="https://www.kaggle.com/chocozzz">Kaggle</a>
         <a href="https://dacon.io/myprofile/29167/home">Dacon</a>
-      </p>
+      </nav>
     </div>
     <div class="intro-photo">
       <img src="pictures/profile.jpg" alt="Photo of Hyeonwoo Kim">
     </div>
   </header>
 
+  <nav class="section-nav" aria-label="Page sections">
+    <div class="section-nav-inner">
+      <a href="#research">Research</a>
+      <a href="#news">News</a>
+      <a href="#publications">Publications</a>
+      <a href="#experience">Experience</a>
+      <a href="#awards">Awards</a>
+      <a href="#talks">Talks</a>
+    </div>
+  </nav>
+
+  <main id="main-content">
+
   <!-- ===================== Research Interests ===================== -->
-  <section>
+  <section id="research">
     <h2>Research Interests</h2>
     <ul>
       <li><b>LLM post-training</b> — supervised fine-tuning, alignment tuning, instruction following</li>
@@ -52,7 +67,7 @@
   </section>
 
   <!-- ===================== News ===================== -->
-  <section>
+  <section id="news">
     <h2>News</h2>
     <ul class="news">
       <li><span class="date">2025.04</span> Two papers presented at NAACL 2025 Industry Track:
@@ -68,7 +83,7 @@
   </section>
 
   <!-- ===================== Publications ===================== -->
-  <section>
+  <section id="publications">
     <h2>Publications</h2>
     <p class="pubnote">Full list on <a href="https://scholar.google.com/citations?user=fUikbhcAAAAJ">Google Scholar</a>.</p>
 
@@ -163,7 +178,7 @@
   </section>
 
   <!-- ===================== Experience ===================== -->
-  <section>
+  <section id="experience">
     <h2>Experience</h2>
 
     <div class="job">
@@ -342,7 +357,7 @@
   </section>
 
   <!-- ===================== Competitions & Awards ===================== -->
-  <section>
+  <section id="awards">
     <h2>Competitions &amp; Awards</h2>
     <p>
       <a href="https://www.kaggle.com/chocozzz"><b>Kaggle Master</b></a> ·
@@ -369,14 +384,24 @@
   </section>
 
   <!-- ===================== Talks & Lectures ===================== -->
-  <section>
+  <section id="talks">
     <h2>Talks &amp; Lectures</h2>
     <ul>
-      <li><b>Fastcampus</b> — Machine Learning Advanced (tabular data)</li>
-      <li><b>T Academy</b> — Introduction to Recommender Systems</li>
-      <li><b>Naver Boostcamp AI Tech</b> — Semantic Segmentation</li>
+      <li>
+        <span class="talk-desc"><b>Fastcampus</b> — Machine Learning Advanced (tabular data)</span>
+      </li>
+      <li>
+        <span class="talk-desc"><b>T Academy</b> — Introduction to Recommender Systems</span>
+        <a class="talk-link" href="https://www.youtube.com/watch?v=43gb7WK56Sk" target="_blank" rel="noopener">Watch on YouTube ↗</a>
+      </li>
+      <li>
+        <span class="talk-desc"><b>Naver Boostcamp AI Tech</b> — Semantic Segmentation, 10-lecture curriculum (guest instructor)</span>
+        <a class="talk-link" href="segmentation-lecture.html">Course overview ↗</a>
+      </li>
     </ul>
   </section>
+
+  </main>
 
   <!-- ===================== Footer ===================== -->
   <footer>
