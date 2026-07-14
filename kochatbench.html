@@ -61,6 +61,77 @@
   </div>
 
   <div class="pp-section">
+    <h2>How Tasks Are Defined &amp; Scored</h2>
+    <p style="margin:0 0 16px; font-size:0.98rem; line-height:1.6;">
+      Each of the 12 tasks has its own English-language rubric with four scoring bands (1–10 scale) —
+      the judge sees only the rubric for the task being tested, and scores the <b>final assistant turn</b>
+      against it.
+    </p>
+    <div class="pp-table-wrap">
+      <table class="pp-table pp-plain" style="margin-bottom:22px;">
+        <caption>Capability taxonomy — 4 capabilities, 12 mutually exclusive tasks</caption>
+        <thead>
+          <tr><th>Capability</th><th>Task</th><th>What it tests</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>C1 · Context &amp; Reference Management</td><td>C1-01</td><td>Explicit Information Recall</td></tr>
+          <tr><td></td><td>C1-02</td><td>Distributed Information Integration</td></tr>
+          <tr><td></td><td>C1-03</td><td>Referential &amp; Ellipsis Resolution</td></tr>
+          <tr><td></td><td>C1-04</td><td>State Change Tracking</td></tr>
+          <tr><td>C2 · Instruction Constraint Maintenance</td><td>C2-01</td><td>Single Instruction Maintenance</td></tr>
+          <tr><td></td><td>C2-02</td><td>Accumulated Constraints</td></tr>
+          <tr><td></td><td>C2-03</td><td>Conflict Resolution</td></tr>
+          <tr><td>C3 · Revision &amp; Recovery</td><td>C3-01</td><td>Iterative Revision &amp; Preservation</td></tr>
+          <tr><td></td><td>C3-02</td><td>Self-Correction</td></tr>
+          <tr><td>C4 · Dialogue Recovery &amp; Robustness</td><td>C4-01</td><td>Error Propagation Blocking</td></tr>
+          <tr><td></td><td>C4-02</td><td>Ambiguity Resolution</td></tr>
+          <tr><td></td><td>C4-03</td><td>Topic Interruption Recovery</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="pp-worked-label">Worked example — C1-03 · Referential &amp; Ellipsis Resolution</p>
+    <div class="pp-table-wrap">
+      <table class="pp-table pp-rubric">
+        <thead>
+          <tr><th>Score</th><th>Criterion</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1–3</td><td>Resolves the reference to the wrong entity, or cannot answer.</td></tr>
+          <tr><td>4–6</td><td>Resolves some references but misses or confuses key links.</td></tr>
+          <tr><td>7–9</td><td>Mostly correct, with minor ambiguity or extra text.</td></tr>
+          <tr><td>10</td><td>Resolves the reference exactly and answers the current request.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin:14px 0; font-size:0.95rem; line-height:1.6; color:var(--muted);">
+      The session opens with a user listing three items <i>by name</i> (가방/bag, 코트/coat, 운동화/sneakers,
+      each with a price), then a fourth, unrelated item (지갑/wallet) enters the conversation. Every
+      question after that points at an item only through a chain of position and discourse references —
+      never the item's name — so the assistant has to keep resolving each new pronoun against what it
+      just said, not against the original list:
+    </p>
+    <div class="pp-transcript">
+      <div class="pp-turn user"><span class="role">User</span><p>어제 백화점에서 가방, 코트, 운동화를 차례로 봤어. 가방은 18만 원, 코트는 24만 원, 운동화는 13만 원이었어. 셋 다 마음에 들긴 했어.</p></div>
+      <div class="pp-turn assistant gold"><span class="role">Assistant (context)</span><p>세 가지를 차례로 보셨군요. 가격대가 조금씩 다르니 어디에 더 끌리는지부터 정하면 고르기 쉬워질 거예요.</p></div>
+      <div class="pp-turn user"><span class="role">User</span><p>점심 먹고 지갑도 봤는데 그건 30만 원이라 바로 포기했어. 방금 본 지갑 말고, 아까 백화점에서 차례로 본 것 중 <b>두 번째로 말한 거</b>, 그거 가격이 얼마였는지 다시 알려줘.</p></div>
+      <div class="pp-turn user"><span class="role">User (next turn)</span><p><b>방금 말한 그것 바로 앞에</b> 봤던 게 사실 제일 끌려. 그건 얼마였는지 짚어줘.</p></div>
+    </div>
+    <div class="pp-eval-strip">
+      <div><span class="lbl">Gemma-4-31B-IT answered</span>코트 바로 앞에 보신 것은 가방이며, 가격은 18만 원이었습니다.</div>
+      <div><span class="lbl">Golden answer</span>그 앞에 보신 건 가방이고, 18만 원이었어요.</div>
+      <div><span class="lbl">Judge score</span><span class="score">10 / 10</span></div>
+    </div>
+    <p style="margin:14px 0 0; font-size:0.95rem; line-height:1.6; color:var(--muted);">
+      "그것 바로 앞에" ("the one right before that") only resolves correctly if the model still has the
+      <i>previous answer's</i> referent (코트/coat) live in working memory — not the original user list. It
+      does, across all three consecutive indirect references in this session, and the LLM-as-a-judge
+      scores each one 10/10 against the golden answer above. (Run: <code>v2_pilot2</code>, target
+      <code>google/gemma-4-31b-it</code>, judge <code>gpt-5.4-mini</code>.)
+    </p>
+  </div>
+
+  <div class="pp-section">
     <h2>Results</h2>
     <p style="margin:0 0 14px; font-size:0.98rem; line-height:1.6;">
       Six commercial LLMs were evaluated with session-level <b>minimum</b> scoring (0–100) — a single bad
