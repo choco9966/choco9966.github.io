@@ -105,29 +105,32 @@
       </table>
     </div>
     <p style="margin:14px 0; font-size:0.95rem; line-height:1.6; color:var(--muted);">
-      The session opens with a user listing three items <i>by name</i> (가방/bag, 코트/coat, 운동화/sneakers,
-      each with a price), then a fourth, unrelated item (지갑/wallet) enters the conversation. Every
-      question after that points at an item only through a chain of position and discourse references —
-      never the item's name — so the assistant has to keep resolving each new pronoun against what it
-      just said, not against the original list:
+      The session opens with three objects changing hands between three people — 하진 gives 민서 a
+      contract in a blue folder, 민서 gives 도윤 a receipt in a red envelope, 도윤 already has a key in a
+      green box. From then on, every turn refers to the objects only through demonstrative pronouns
+      (이것/그것/그걸, "it"/"that"/"that one") layered on top of each other, never their names — so the
+      assistant has to resolve a demonstrative whose antecedent is itself another demonstrative from the
+      turn before:
     </p>
     <div class="pp-transcript">
-      <div class="pp-turn user"><span class="role">User</span><p>어제 백화점에서 가방, 코트, 운동화를 차례로 봤어. 가방은 18만 원, 코트는 24만 원, 운동화는 13만 원이었어. 셋 다 마음에 들긴 했어.</p></div>
-      <div class="pp-turn assistant gold"><span class="role">Assistant (context)</span><p>세 가지를 차례로 보셨군요. 가격대가 조금씩 다르니 어디에 더 끌리는지부터 정하면 고르기 쉬워질 거예요.</p></div>
-      <div class="pp-turn user"><span class="role">User</span><p>점심 먹고 지갑도 봤는데 그건 30만 원이라 바로 포기했어. 방금 본 지갑 말고, 아까 백화점에서 차례로 본 것 중 <b>두 번째로 말한 거</b>, 그거 가격이 얼마였는지 다시 알려줘.</p></div>
-      <div class="pp-turn user"><span class="role">User (next turn)</span><p><b>방금 말한 그것 바로 앞에</b> 봤던 게 사실 제일 끌려. 그건 얼마였는지 짚어줘.</p></div>
+      <div class="pp-turn user"><span class="role">User</span><p>하진은 파란 서류철에 계약서를 넣어 민서에게 건넸고, 민서는 빨간 봉투에 영수증을 넣어 도윤에게 줬어. 도윤은 초록 상자에 열쇠를 보관하고 있었어.</p></div>
+      <div class="pp-turn assistant gold"><span class="role">Assistant (context)</span><p>세 사람 사이에 오간 물건을 순서대로 적어 둘게요. 이어지는 변화가 있으면 누가 무엇을 가졌는지 따라가며 정리하겠습니다.</p></div>
+      <div class="pp-turn user"><span class="role">User</span><p>그 뒤 도윤은 자기가 <b>받은 걸</b> 초록 상자 옆에 뒀어. 도윤이 '받은 걸'이 뭐였는지 짚어줘.</p></div>
+      <div class="pp-turn assistant gold"><span class="role">Assistant (context)</span><p>도윤이 받은 것은 민서가 준 빨간 봉투의 영수증이에요.</p></div>
+      <div class="pp-turn user"><span class="role">User (next turn)</span><p>도윤은 <b>옆에 둔 그것</b>을 민서에게 다시 보냈고, 하진은 <b>돌려받은 것</b>을 검은 가방에 넣었어. 이 문장에서 '옆에 둔 그것'과 '돌려받은 것'이 각각 뭔지 말해줘.</p></div>
     </div>
     <div class="pp-eval-strip">
-      <div><span class="lbl">Gemma-4-31B-IT answered</span>코트 바로 앞에 보신 것은 가방이며, 가격은 18만 원이었습니다.</div>
-      <div><span class="lbl">Golden answer</span>그 앞에 보신 건 가방이고, 18만 원이었어요.</div>
+      <div><span class="lbl">Gemma-4-31B-IT answered</span>'옆에 둔 그것'은 영수증이고, '돌려받은 것'은 계약서 원본이에요.</div>
+      <div><span class="lbl">Golden answer</span>'옆에 둔 그것'은 영수증이고, '돌려받은 것'은 계약서 원본이에요.</div>
       <div><span class="lbl">Judge score</span><span class="score">10 / 10</span></div>
     </div>
     <p style="margin:14px 0 0; font-size:0.95rem; line-height:1.6; color:var(--muted);">
-      "그것 바로 앞에" ("the one right before that") only resolves correctly if the model still has the
-      <i>previous answer's</i> referent (코트/coat) live in working memory — not the original user list. It
-      does, across all three consecutive indirect references in this session, and the LLM-as-a-judge
-      scores each one 10/10 against the golden answer above. (Run: <code>v2_pilot2</code>, target
-      <code>google/gemma-4-31b-it</code>, judge <code>gpt-5.4-mini</code>.)
+      "옆에 둔 그것" ("that thing it set down") can only resolve back to the receipt via the previous
+      turn's answer — the demonstrative doesn't point at anything in the original sentence at all. And
+      "돌려받은 것" ("the thing it got back") requires tracking a second, independent object (the
+      contract) through its own return trip. The model has to keep both chains straight in the same
+      sentence. (Run: <code>v2_pilot2</code>, target <code>google/gemma-4-31b-it</code>, judge
+      <code>gpt-5.4-mini</code>.)
     </p>
   </div>
 
