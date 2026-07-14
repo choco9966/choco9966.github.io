@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>KoChatBench: A Korean Multi-turn Chatbot Benchmark | Hyeonwoo Kim</title>
+  <meta name="description" content="KoChatBench — a capability-based benchmark for evaluating Korean multi-turn dialogue models across context management, instruction constraints, revision, and dialogue recovery.">
+  <link rel="stylesheet" href="stylesheet.css">
+  <link rel="stylesheet" href="paper-poster.css">
+</head>
+<body>
+<a class="skip-link" href="#pp-main">Skip to content</a>
+<div class="container poster-container">
+
+  <a class="back-link" href="index.html">← Hyeonwoo Kim</a>
+
+  <header class="pp-banner" id="pp-main">
+    <p class="pp-kicker">Recent Research · Project Page</p>
+    <h1 class="pp-title">KoChatBench: A Korean Multi-turn Chatbot Benchmark for Conversational Capability Evaluation</h1>
+    <p class="pp-authors">Cheonsol Lee, <b>Hyeonwoo Kim</b></p>
+    <p class="pp-affil">A capability-based benchmark for diagnosing Korean multi-turn dialogue failures</p>
+  </header>
+
+  <div class="pp-section">
+    <h2>Motivation</h2>
+    <ul class="pp-bullets">
+      <li>Real chatbot use spans three or more turns, requiring models to retain prior information, resolve ellipsis and anaphora, and handle topic shifts — but most LLM evaluation is still single-turn or English-centric.</li>
+      <li>Korean dialogue adds language-specific failure modes: subject omission, demonstratives, particles, honorifics, and style shifts are tightly coupled to context in ways that simply translating English benchmarks does not capture.</li>
+      <li>Existing multi-turn benchmarks (MT-Bench-101, MultiChallenge, TOD-ProcBench, …) are large but not built around Korean-specific capabilities.</li>
+    </ul>
+  </div>
+
+  <div class="pp-section">
+    <h2>Building the Benchmark</h2>
+    <figure class="pp-figure">
+      <img src="pictures/kochatbench-fig1.png" alt="Five-stage KoChatBench generation pipeline: Taxonomy, generate dialogues with LLMs, rule-based validation, LLM-as-a-judge filtering, regeneration of rejected samples, and final human correction, producing the benchmark.">
+      <figcaption>KoChatBench's five-stage construction pipeline: taxonomy-guided generation, rule-based validation, LLM-as-a-judge filtering, regeneration of rejected samples, and final human verification.</figcaption>
+    </figure>
+    <ul class="pp-bullets">
+      <li>Sessions are generated against a taxonomy of <b>four core capabilities</b>: context &amp; reference management, instruction constraint maintenance &amp; response execution, revision &amp; recovery, and dialogue recovery &amp; robustness — each split into mutually exclusive sub-tasks.</li>
+      <li>GPT-5.5 and Claude Sonnet 4.6 generate candidate sessions; rule-based checks catch structural errors, then the same models judge consistency and naturalness before rejected samples are regenerated and accepted ones human-verified.</li>
+    </ul>
+    <div class="pp-table-wrap">
+      <table class="pp-table">
+        <caption>KoChatBench vs. prior multi-turn benchmarks (Table 1 of the paper)</caption>
+        <thead>
+          <tr><th>Benchmark</th><th># Dialogues</th><th># Turns</th><th># Tasks</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>MT-Bench-101</td><td>1,388</td><td>4,208</td><td>13</td></tr>
+          <tr><td>MT-Bench++</td><td>80</td><td>640</td><td>8</td></tr>
+          <tr><td>MT-Eval</td><td>168</td><td>1,170</td><td>4</td></tr>
+          <tr><td>MultiChallenge</td><td>273</td><td>1,108</td><td>4</td></tr>
+          <tr><td>StructFlowBench</td><td>155</td><td>643</td><td>6</td></tr>
+          <tr><td>MMMT-IF</td><td>71</td><td>990</td><td>6</td></tr>
+          <tr><td>TOD-ProcBench</td><td>1,004</td><td>6,953</td><td>3</td></tr>
+          <tr><td>KoChatBench (ours)</td><td>600</td><td>2,518</td><td>12</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="pp-section">
+    <h2>Results</h2>
+    <p style="margin:0 0 14px; font-size:0.98rem; line-height:1.6;">
+      Six commercial LLMs were evaluated with session-level <b>minimum</b> scoring (0–100) — a single bad
+      turn drags down the whole session, which is deliberate: it surfaces stability failures that a
+      mean-only score would hide.
+    </p>
+    <div class="pp-table-wrap">
+      <table class="pp-table">
+        <caption>Overall session-minimum score by model (Table 4 of the paper)</caption>
+        <thead>
+          <tr><th>Model</th><th>Overall</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Gemma-4 31B-it</td><td>91.0</td></tr>
+          <tr><td>Mistral Medium 3.5</td><td>89.1</td></tr>
+          <tr><td>GPT-OSS 120B</td><td>88.2</td></tr>
+          <tr><td>Nemotron Nano</td><td>83.5</td></tr>
+          <tr><td>GPT-OSS 20B</td><td>83.3</td></tr>
+          <tr><td>Nemotron Super</td><td>71.6</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <ul class="pp-bullets" style="margin-top:18px;">
+      <li>Gemma-4-31B-IT leads overall but is not universally best — it records the <i>lowest</i> score among all models on the Explicit Information Recall sub-task, showing that a strong aggregate can still hide task-specific weaknesses.</li>
+      <li>Nemotron-3-Super-120B-A12B shows the weakest overall performance, concentrated in Conversational Recovery &amp; Robustness — trouble preventing error propagation, resolving ambiguity, and resuming topic after interruptions.</li>
+      <li>Scores are consistently lower on later turns, indicating that context degrades before it fully breaks — a pattern only visible because KoChatBench scores every turn, not just the final one.</li>
+    </ul>
+    <p class="pp-note">
+      <b>Ongoing work:</b> the KoChatBench evaluation suite is under active development in a private
+      repository — the v2 pilot (117 samples across 12 tasks) is currently benchmarking
+      Gemma-4-31B-IT, GPT-OSS-120B, and GPT-OSS-20B, extending the capability-level analysis introduced
+      in the paper.
+    </p>
+  </div>
+
+  <div class="pp-footer">
+    <p>Submitted for peer review; not accepted for publication.</p>
+    <p class="copyright">© Hyeonwoo Kim</p>
+  </div>
+
+</div>
+</body>
+</html>

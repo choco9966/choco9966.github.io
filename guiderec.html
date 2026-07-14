@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GuideRec: GraphRAG for Intent-Driven Dining Recommendation | Hyeonwoo Kim</title>
+  <meta name="description" content="GuideRec — a GraphRAG system for user intent-driven dining experience recommendation, applied to Jeju Island tourism.">
+  <link rel="stylesheet" href="stylesheet.css">
+  <link rel="stylesheet" href="paper-poster.css">
+</head>
+<body>
+<a class="skip-link" href="#pp-main">Skip to content</a>
+<div class="container poster-container">
+
+  <a class="back-link" href="index.html">← Hyeonwoo Kim</a>
+
+  <header class="pp-banner" id="pp-main">
+    <p class="pp-kicker">Recent Research · Project Page</p>
+    <h1 class="pp-title">GuideRec: GraphRAG System Design for User Intent-Driven Dining Experience Recommendation</h1>
+    <p class="pp-authors">
+      Minsang Namgoong, <b>Hyeonwoo Kim</b>, Youngsang Jeong, Sanghyeon Lee, Kyeongchan Lee,
+      Namjoon Lee, SunHyeok Park, Seonjin Hwang, Dongju Park
+    </p>
+    <p class="pp-affil">Restaurant recommendation for unfamiliar destinations, evaluated on Jeju Island tourism data</p>
+  </header>
+
+  <div class="pp-section">
+    <h2>Motivation</h2>
+    <ul class="pp-bullets">
+      <li>Tourists struggle to find suitable restaurants in unfamiliar places, where local knowledge is thin and preferences are hard to put into a keyword search.</li>
+      <li>Three recurring failure modes motivate the work: <b>multi-constraint natural-language queries</b> (occasion, companions, budget, cuisine all at once), <b>cold-start restaurants</b> with few or no reviews, and the need for <b>robust fallback</b> when constraints are too narrow to match anything.</li>
+      <li>Conventional RAG retrieves only what has been reviewed — a new, unreviewed restaurant is invisible even if it fits the visit context perfectly.</li>
+    </ul>
+  </div>
+
+  <div class="pp-section">
+    <h2>Why GraphRAG</h2>
+    <figure class="pp-figure">
+      <img src="pictures/guiderec-fig1.png" alt="Comparison of RAG and GraphRAG retrieval for the query 'Could you recommend a restaurant for a date with my girlfriend?'">
+      <figcaption>Plain RAG only retrieves stores with matching reviews, missing unreviewed restaurants. GraphRAG instead traverses structured relations (e.g., shared menu items) to surface relevant new stores.</figcaption>
+    </figure>
+    <p style="margin:0; font-size:0.98rem; line-height:1.6;">
+      GuideRec builds a knowledge graph of Jeju Island restaurants from Naver Map, Google Maps, and Kakao
+      Map data. Node types capture <i>visit context</i> directly — <b>STORE</b>, <b>CITY/REGION</b>,
+      <b>ATTR</b> (nearby attractions), <b>VISIT_WITH</b> (companion type), <b>VISIT_PURPOSE</b>, and
+      <b>REVIEW</b> — so that structured filtering (price, location, menu) and semantic review search can
+      run together instead of one substituting for the other.
+    </p>
+  </div>
+
+  <div class="pp-section">
+    <h2>System Design</h2>
+    <figure class="pp-figure">
+      <img src="pictures/guiderec-fig2.png" alt="GuideRec Text2Cypher pipeline: user query is rewritten, field-detected into seven constraint types, compiled into a Cypher query against the Neo4j knowledge graph, then re-ranked by semantic and LLM judgment into a final recommendation.">
+      <figcaption>GuideRec's three-phase pipeline: intent extraction and query rewriting, graph-based candidate retrieval with a semantic-similarity fallback, and LLM re-ranking.</figcaption>
+    </figure>
+    <ul class="pp-bullets">
+      <li><b>User Intent Extraction</b> — an LLM rewrites ambiguous queries via few-shot prompting, then a Field Detection module maps them onto seven constraint types (restaurant name, price, location, menu, attraction, visit purpose, companion type).</li>
+      <li><b>Candidate Selection via GraphRAG</b> — the structured fields compile into a Cypher query executed on a Neo4j knowledge graph (up to 500 candidates); results are semantically re-ranked by embedding similarity against the rewritten query. If Cypher retrieval yields fewer than six candidates, a FastRP graph-embedding fallback searches structurally similar restaurants instead.</li>
+      <li><b>Final Selection</b> — PALR (Prompt-based Active List Ranking) has the LLM holistically weigh up to six candidates and produce the top three, with a natural-language explanation for each.</li>
+    </ul>
+  </div>
+
+  <div class="pp-section">
+    <h2>Evaluation</h2>
+    <ul class="pp-bullets">
+      <li>Rather than relying only on offline ranking metrics, GuideRec was evaluated through a <b>user-centric qualitative study</b>: participants stated their travel companions and food preferences, interacted freely with the system, then completed a questionnaire.</li>
+      <li>The evaluation follows the <b>ResQue framework</b>, scoring usability, reliability, and quality indicators alongside <b>service reuse intention</b> — measures that are closer to what determines whether a recommender is actually useful than static Recall@K or nDCG.</li>
+    </ul>
+    <p class="pp-note">
+      <b>Takeaway:</b> combining graph-structured constraint retrieval with semantic fallback lets GuideRec
+      surface cold-start restaurants that pure RAG would miss, while PALR re-ranking keeps the final
+      explanation grounded in the user's actual intent.
+    </p>
+  </div>
+
+  <div class="pp-footer">
+    <p>Submitted for peer review; not accepted for publication.</p>
+    <p class="copyright">© Hyeonwoo Kim</p>
+  </div>
+
+</div>
+</body>
+</html>

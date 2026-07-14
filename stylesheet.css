@@ -354,38 +354,45 @@ section li {
   margin-top: 0;
 }
 
-.pubs {
+.pubs,
+.projects {
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.pubs li {
+.pubs li,
+.projects li {
   margin: 0;
   padding: 12px 0 15px;
   border-bottom: 1px solid var(--rule);
 }
 
-.pubs li:last-child {
+.pubs li:last-child,
+.projects li:last-child {
   border-bottom: 0;
 }
 
-.pubs li > a {
+.pubs li > a,
+.projects li > a {
   color: var(--ink);
   font-weight: 690;
   line-height: 1.45;
 }
 
-.pubs li > a:hover {
+.pubs li > a:hover,
+.projects li > a:hover {
   color: var(--accent);
 }
 
-.pubs .authors {
+.pubs .authors,
+.projects .authors {
   color: #3e444d;
   font-size: 0.91rem;
 }
 
-.pubs .venue {
+.pubs .venue,
+.projects .venue {
   color: var(--muted);
   font-size: 0.84rem;
   font-style: normal;
