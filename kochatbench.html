@@ -63,9 +63,10 @@
   <div class="pp-section">
     <h2>How Tasks Are Defined &amp; Scored</h2>
     <p style="margin:0 0 16px; font-size:0.98rem; line-height:1.6;">
-      Each of the 12 tasks has its own English-language rubric with four scoring bands (1–10 scale) —
-      the judge sees only the rubric for the task being tested, and scores the <b>final assistant turn</b>
-      against it.
+      Each of the 12 tasks has its own English-language rubric with four scoring bands (1–10 scale).
+      Depending on the task's <code>eval_scope</code>, the judge scores either <b>every</b> qualifying
+      assistant turn or only the <b>last</b> one in the session — each turn is judged independently,
+      one candidate response at a time, against the rubric for the task being tested.
     </p>
     <div class="pp-table-wrap">
       <table class="pp-table pp-plain" style="margin-bottom:22px;">
@@ -115,6 +116,8 @@
     <div class="pp-transcript">
       <div class="pp-turn user"><span class="role">User</span><p>하진은 파란 서류철에 계약서를 넣어 민서에게 건넸고, 민서는 빨간 봉투에 영수증을 넣어 도윤에게 줬어. 도윤은 초록 상자에 열쇠를 보관하고 있었어.</p></div>
       <div class="pp-turn assistant gold"><span class="role">Assistant (context)</span><p>세 사람 사이에 오간 물건을 순서대로 적어 둘게요. 이어지는 변화가 있으면 누가 무엇을 가졌는지 따라가며 정리하겠습니다.</p></div>
+      <div class="pp-turn user"><span class="role">User</span><p>민서는 <b>받은 것</b>을 복사한 뒤 <b>원본만 하진에게 돌려줬어</b>. 여기서 민서가 '받은 것'이 뭐였는지 풀어서 말해줘.</p></div>
+      <div class="pp-turn assistant gold"><span class="role">Assistant (context)</span><p>민서가 받은 것은 하진이 건넨 파란 서류철의 계약서예요.</p></div>
       <div class="pp-turn user"><span class="role">User</span><p>그 뒤 도윤은 자기가 <b>받은 걸</b> 초록 상자 옆에 뒀어. 도윤이 '받은 걸'이 뭐였는지 짚어줘.</p></div>
       <div class="pp-turn assistant gold"><span class="role">Assistant (context)</span><p>도윤이 받은 것은 민서가 준 빨간 봉투의 영수증이에요.</p></div>
       <div class="pp-turn user"><span class="role">User (next turn)</span><p>도윤은 <b>옆에 둔 그것</b>을 민서에게 다시 보냈고, 하진은 <b>돌려받은 것</b>을 검은 가방에 넣었어. 이 문장에서 '옆에 둔 그것'과 '돌려받은 것'이 각각 뭔지 말해줘.</p></div>
@@ -137,7 +140,8 @@
   <div class="pp-section">
     <h2>Results</h2>
     <p style="margin:0 0 14px; font-size:0.98rem; line-height:1.6;">
-      Six commercial LLMs were evaluated with session-level <b>minimum</b> scoring (0–100) — a single bad
+      Six LLMs (open-weight and commercial) were evaluated. Per-turn rubric scores (1–10) within a
+      session are aggregated to a session-level <b>minimum</b>, then rescaled to 0–100 — a single bad
       turn drags down the whole session, which is deliberate: it surfaces stability failures that a
       mean-only score would hide.
     </p>
@@ -171,7 +175,7 @@
   </div>
 
   <div class="pp-footer">
-    <p>Submitted for peer review; not accepted for publication.</p>
+    <p>Independent research project — not a formal publication.</p>
     <p class="copyright">© Hyeonwoo Kim</p>
   </div>
 

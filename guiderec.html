@@ -29,7 +29,7 @@
     <ul class="pp-bullets">
       <li>Tourists struggle to find suitable restaurants in unfamiliar places, where local knowledge is thin and preferences are hard to put into a keyword search.</li>
       <li>Three recurring failure modes motivate the work: <b>multi-constraint natural-language queries</b> (occasion, companions, budget, cuisine all at once), <b>cold-start restaurants</b> with few or no reviews, and the need for <b>robust fallback</b> when constraints are too narrow to match anything.</li>
-      <li>Conventional RAG retrieves only what has been reviewed — a new, unreviewed restaurant is invisible even if it fits the visit context perfectly.</li>
+      <li>A review-only retrieval baseline can surface only what has been reviewed — a new, unreviewed restaurant stays invisible even if it fits the visit context perfectly, unless the index also covers structured attributes beyond review text.</li>
     </ul>
   </div>
 
@@ -37,7 +37,7 @@
     <h2>Why GraphRAG</h2>
     <figure class="pp-figure">
       <img src="pictures/guiderec-fig1.png" alt="Comparison of RAG and GraphRAG retrieval for the query 'Could you recommend a restaurant for a date with my girlfriend?'">
-      <figcaption>Plain RAG only retrieves stores with matching reviews, missing unreviewed restaurants. GraphRAG instead traverses structured relations (e.g., shared menu items) to surface relevant new stores.</figcaption>
+      <figcaption>A review-text-only RAG baseline retrieves stores with matching reviews and misses unreviewed restaurants. GraphRAG instead traverses structured relations (e.g., shared menu items) to surface relevant new stores.</figcaption>
     </figure>
     <p style="margin:0; font-size:0.98rem; line-height:1.6;">
       GuideRec builds a knowledge graph of Jeju Island restaurants from Naver Map, Google Maps, and Kakao
@@ -68,14 +68,16 @@
       <li>The evaluation follows the <b>ResQue framework</b>, scoring usability, reliability, and quality indicators alongside <b>service reuse intention</b> — measures that are closer to what determines whether a recommender is actually useful than static Recall@K or nDCG.</li>
     </ul>
     <p class="pp-note">
-      <b>Takeaway:</b> combining graph-structured constraint retrieval with semantic fallback lets GuideRec
-      surface cold-start restaurants that pure RAG would miss, while PALR re-ranking keeps the final
-      explanation grounded in the user's actual intent.
+      <b>Takeaway:</b> GuideRec is designed so that graph-structured constraint retrieval plus a semantic
+      fallback can surface cold-start restaurants a review-only baseline would miss, while PALR re-ranking
+      keeps the final explanation grounded in the user's actual intent. The qualitative study measured
+      perceived usability and reuse intention rather than head-to-head retrieval metrics against that
+      baseline, so this is the system's design goal, not yet a benchmarked result.
     </p>
   </div>
 
   <div class="pp-footer">
-    <p>Submitted for peer review; not accepted for publication.</p>
+    <p>Independent research project — not a formal publication.</p>
     <p class="copyright">© Hyeonwoo Kim</p>
   </div>
 
